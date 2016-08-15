@@ -16,13 +16,22 @@ import pandas as pd
 
 DATA_FILE = 'example_data.csv'
 
+import operator
 
 def print_scores(scores):
     for interviewer in scores.keys():
         print "%s" % interviewer
-        for column in scores[interviewer].keys():
-            print "\t%s:\t%.2f" % (column, scores[interviewer][column])
-    
+        sorted_scores = sorted(scores[interviewer].items(), key=operator.itemgetter(1), reverse=True)
+        max_key = sorted_scores[0][0]
+
+        print "\t Max suspicious column: %s" % max_key
+        print "\t All interviewer scores for this column:"
+        for interviewer2 in scores.keys():
+            print "\t\t%s:\t%0.2f" % (interviewer2, scores[interviewer2][max_key])
+
+        for score in sorted_scores[:5]:
+            print "\t%s:\t%.2f" % score
+
 
 if __name__ == '__main__':
     data = pd.read_csv(DATA_FILE)  # Uncomment to load as pandas.DataFrame.
